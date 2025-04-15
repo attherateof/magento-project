@@ -1,0 +1,186 @@
+grumphp:
+  environment:
+    paths: ['/var/www/html']
+    variables:
+      GRUMPHP_BIN_DIR: '/var/www/html/vendor/bin'
+
+  git_hook_variables:
+    EXEC_GRUMPHP_COMMAND: 'docker compose exec -T php-fpm php'
+
+  hide_circumvention_tip: true
+  process_timeout: 120
+  stop_on_failure: true
+  ignore_unstaged_changes: false
+
+  tasks:
+    jsonlint:
+      detect_key_conflicts: true
+      metadata:
+        priority: 100
+
+    yamllint:
+      ignore_patterns:
+        - "#test/(.*).yml#"
+        - "#vendor/#"
+        - "#charts/.*#"
+      metadata:
+        priority: 100
+
+    xmllint:
+      ignore_patterns:
+        - "#vendor/#"
+        - "#test/(.*).xml#"
+      metadata:
+        priority: 100
+
+    phplint:
+      triggered_by: ['php', 'phtml']
+      metadata:
+        priority: 200
+
+    composer:
+      file: ./composer.json
+      no_check_all: true
+      no_check_lock: false
+      no_check_publish: false
+      with_dependencies: false
+      strict: false
+      metadata:
+        priority: 90
+ 
+    git_commit_message:
+      allow_empty_message: false
+      enforce_capitalized_subject: true
+      enforce_no_subject_punctuations: true
+      enforce_no_subject_trailing_period: true
+      enforce_single_lined_subject: true
+      max_subject_width: 72
+      max_body_width: 100
+      case_insensitive: false # Needs to be false to enforce capitalized types
+      multiline: false
+      type_scope_conventions:
+        types:
+          - Feat
+          - Fix
+          - Chore
+          - Docs
+          - Style
+          - Refactor
+          - Test
+          - Perf
+        scopes:
+          - cart
+          - checkout
+          - ci
+          - product
+          - admin
+          - codequality
+      matchers:
+        "Commit must follow: Type(Scope): TICKET-<number> <message>": "/^(Feat|Fix|Chore|Docs|Style|Refactor|Test|Perf)\\((cart|checkout|ci|product|admin|codequality)\\): TICKET-[0-9]+ .+/"
+      metadata:
+        priority: 100
+
+    git_branch_name:
+      whitelist:
+        - "/^(feature|bugfix|hotfix|release)\\/[a-z0-9\\-_]+-(master|main|develop|stage)$/"
+      blacklist:
+        - "master"
+        - "main"
+        - "develop"
+        - "stage"
+      allow_detached_head: false
+      metadata:
+        priority: 100
+
+    git_blacklist:
+      keywords:
+        - "<<<<<<<"
+        - "======="
+        - "DebuggerUtility"
+        - "ObjectManager::getInstance"
+        - "_GET\\["
+        - "_POST\\["
+        - "_REQUEST\\["
+        - "console\\.log\\("
+        - "die;"
+        - "exit\\("
+        - "exit;"
+        - "fileadmin"
+        - "localhost"
+        - "phpinfo"
+        - "phpinfo\\("
+        - "print_r\\("
+        - "var_dump\\("
+        - "_objectManager"
+        - "ObjectManagerInterface"
+        - "global "
+        - "eval\\("
+        - "error_reporting\\("
+        - "die\\("
+      triggered_by: ['php', 'phtml', 'html', 'js']
+      regexp_type: E
+      # ignore_patterns:
+      metadata:
+        priority: 95
+
+    phpcs:
+      standard: Magento2
+      tab_width: 4
+      severity: 10
+      error_severity: 10
+      warning_severity: 10
+      report: full
+      triggered_by: [php, phtml]
+      metadata:
+        priority: 80
+
+    phpmd:
+      ruleset:
+        - './dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml'
+      triggered_by: ['php']
+      exclude:
+        - './app/code/Magento/'
+      metadata:
+        priority: 75
+
+    phpstan:
+      autoload_file: '/var/www/html/app/autoload.php'
+      configuration: './dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon'
+      level: max
+      triggered_by: ['php', 'phtml']
+      memory_limit: "-1"
+      force_patterns: []
+      ignore_patterns: []
+      metadata:
+        priority: 90
+
+    phpcsfixer2:
+      allow_risky: false
+      config: './.php-cs-fixer.dist.php'
+      triggered_by: ['php', 'phtml']
+      using_cache: true
+      cache_file: './.php_cs.cache'
+      diff: true
+      config_contains_finder: true
+      verbose: true
+      metadata:
+        priority: 60
+
+    # Security check (local)
+    # securitychecker_local:
+    #   lockfile: ./composer.lock
+    #   format: ~
+    #   no_dev: false                     # Whether to skip dev dependencies (optional)
+    #   run_always: false
+
+    # Restrict large files
+    file_size:
+      max_size: 2M
+
+    # Parse-level checks with strict type hinting
+    phpparser:
+      triggered_by: ['php']
+      ignore_patterns: ['.php-cs-fixer.dist.php']
+      kind: php8
+      visitors:
+        declare_strict_types: ~
