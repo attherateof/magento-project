@@ -11,7 +11,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "laminas/laminas-dependency-plugin": true,
             "magento/*": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "phpro/grumphp": true
         },
         "preferred-install": "dist",
         "sort-packages": true
@@ -62,17 +63,20 @@
         }
     },
     "require-dev": {
-        "magento/magento-allure-phpunit": "^3.0.2",
+        "carlos-mg89/oauth": "^0.8.17",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7 || ^1.0",
         "dg/bypass-finals": "^1.4",
-        "friendsofphp/php-cs-fixer": "^3.22",
-        "carlos-mg89/oauth": "^0.8.17",
-        "magento/magento-coding-standard": "*",
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "magento/magento-allure-phpunit": "^3.0.2",
+        "magento/magento-coding-standard": "^36.0",
         "magento/magento2-functional-testing-framework": "^5.0",
         "pdepend/pdepend": "3.x-dev",
-        "phpmd/phpmd": "3.x-dev",
-        "phpstan/phpstan": "^1.9",
+        "php-parallel-lint/php-parallel-lint": "^1.4",
+        "phpmd/phpmd": "^1.5",
+        "phpro/grumphp": "^2.12",
+        "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^10.5",
+        "squizlabs/php_codesniffer": "*",
         "symfony/finder": "^6.4"
     },
     "conflict": {
@@ -98,5 +102,13 @@
     ],
     "extra": {
         "magento-force": "override"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "([ $COMPOSER_DEV_MODE -eq 0 ] || vendor/bin/phpcs --config-set installed_paths vendor/magento/magento-coding-standard/)"
+        ],
+        "post-update-cmd": [
+            "([ $COMPOSER_DEV_MODE -eq 0 ] || vendor/bin/phpcs --config-set installed_paths vendor/magento/magento-coding-standard/)"
+        ]
     }
 }
