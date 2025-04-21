@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright © 2025 EasyMage. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @author    Amit Biswas <amit.biswas.webdeveloper@gmail.com>
+ * @copyright 2025 EasyMage
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/config.xsd">
+    <default>
+        <easy_mage>
+            <general>
+                <is_enabled>0</is_enabled>
+                <index_prefix>magento_logs</index_prefix>
+                <log_levels>100,200,250,300,400,500,550,600</log_levels>
+                <cron_schedule>55 23 28 * *</cron_schedule>
+            </general>
+        </easy_mage>
+    </default>
+</config>
