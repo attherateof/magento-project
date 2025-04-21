@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright © 2025 EasyMage. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @author    Amit Biswas <amit.biswas.webdeveloper@gmail.com>
+ * @copyright 2025 EasyMage
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!--preference-->
+    <preference for="EasyMage\OpenSearchLogger\Api\ConfigInterface" type="EasyMage\OpenSearchLogger\Model\Config" />
+    <!--plugin-->
+    <type name="Magento\Framework\Logger\Handler\Base">
+        <plugin name="opensearch_log" type="EasyMage\OpenSearchLogger\Plugin\LogRecord" />
+    </type>
+    <!--custom logger-->
+    <virtualType name="EasyMage\OpenSearchLogger\Logger\Handler\SearchEngine" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/SearchEngineException.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="EasyMage\OpenSearchLogger\Logger\SearchEngineLogger" type="Monolog\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">SearchEngineLogger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="search" xsi:type="object">EasyMage\OpenSearchLogger\Logger\Handler\SearchEngine</item>
+            </argument>
+            <argument name="processors" xsi:type="array">
+                <item name="search_exception" xsi:type="object">EasyMage\OpenSearchLogger\Logger\SearchExceptionProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!--logger argument-->
+    <type name="EasyMage\OpenSearchLogger\Console\Command\CreateIndex">
+        <arguments>
+            <argument name="logger" xsi:type="object">EasyMage\OpenSearchLogger\Logger\SearchEngineLogger</argument>
+        </arguments>
+    </type>
+    <type name="EasyMage\OpenSearchLogger\Cron\CreateIndex">
+        <arguments>
+            <argument name="logger" xsi:type="object">EasyMage\OpenSearchLogger\Logger\SearchEngineLogger</argument>
+        </arguments>
+    </type>
+    <type name="EasyMage\OpenSearchLogger\Plugin\LogRecord">
+        <arguments>
+            <argument name="logger" xsi:type="object">EasyMage\OpenSearchLogger\Logger\SearchEngineLogger</argument>
+        </arguments>
+    </type>
+    <!--cli command-->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="easy_mage_open_search_logger_create_index" xsi:type="object">EasyMage\OpenSearchLogger\Console\Command\CreateIndex</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

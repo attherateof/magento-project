@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright © 2025 EasyMage. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @author    Amit Biswas <amit.biswas.webdeveloper@gmail.com>
+ * @copyright 2025 EasyMage
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="easy_mage_tab" translate="label" sortOrder="900">
+            <label>Easy Mage</label>
+        </tab>
+        <section id="easy_mage" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Open Search Logger</label>
+            <tab>easy_mage_tab</tab>
+            <resource>Magento_Catalog::config_catalog</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Synchronize log to Open Search</label>
+                <field id="is_enabled" translate="label" type="select" showInDefault="1" canRestore="1" sortOrder="10">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="index_prefix" translate="label" type="text" showInDefault="1" canRestore="1" sortOrder="20">
+                    <label>Index Prefix</label>
+                    <comment>Set the prefix for OpenSearch index names</comment>
+                </field>
+                <field id="log_levels" translate="label" type="multiselect" showInDefault="1" canRestore="1" sortOrder="30">
+                    <label>Allowed levels</label>
+                    <comment>Select log levels to synchronize with OpenSearch</comment>
+                    <source_model>EasyMage\OpenSearchLogger\Model\Config\Source\LogLevels</source_model>
+                </field>
+                <field id="cron_schedule" translate="label" type="text" showInDefault="1" canRestore="1" sortOrder="40">
+                    <label>Log rotation cron</label>
+                    <comment>Schedule a cron, that will generate new index for next month.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

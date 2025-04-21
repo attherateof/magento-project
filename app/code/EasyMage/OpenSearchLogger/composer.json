@@ -1,0 +1,22 @@
+{
+    "name": "easymage/module-opensearchlogger",
+    "description": "This Magento 2 module provides a mechanism to store a copy of your application logs into opensearch.",
+    "type": "magento2-module",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Amit Biswas",
+            "email": "amit.biswas.webdeveloper@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "EasyMage\\OpenSearchLogger\\": ""
+        }
+    }
+}
