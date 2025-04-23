@@ -1,11 +1,11 @@
-# Magento 2 Module - EasyMage OpenSearchLogger
+# Magento 2 Module - EasyMage_OpenSearchLogger
     ``easymage/module-opensearchlogger``
 
 ## Main Functionalities
 This Magento 2 module provides a mechanism to store a copy of your application logs into a secondary store (e.g., Elasticsearch/OpenSearch), enabling faster and more convenient log searching, filtering, and analysis — directly from logs emitted by Magento.
 
 ### Key Features
-- Captures and mirrors Magento logs (error, warning, debug, etc.)
+- Captures and mirrors Magento logs in realtime (error, warning, debug, etc.)
 - Enhances observability and supports real-time debugging
 - Structured log storage for easy querying and statistics
 - Admin configuration options to control log levels and log storage behavior
@@ -20,6 +20,9 @@ This Magento 2 module provides a mechanism to store a copy of your application l
 ### Performance & Scalability
 - Recommended for small to medium traffic applications
 - For high-traffic applications, it is recommended to use Filebeat or similar log shipper tools to sync logs directly from the file system to external services like Elasticsearch or Opensearch, making the log mirroring process fully independent of the Magento runtime.
+
+## Supported Version
+    ``Magento 2.4.8``
 
 ## Installation
  - Install the module composer by running `composer require easymage/module-opensearchlogger`
